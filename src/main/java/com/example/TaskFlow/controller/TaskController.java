@@ -28,6 +28,15 @@ public class TaskController {
             return new ResponseEntity(dataUploadException.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+    @GetMapping("/allTasks")
+    public ResponseEntity getAllTasks(){
+        try{
+            return new ResponseEntity(taskService.getAllTasks(),HttpStatus.ACCEPTED);
+        }
+        catch (Exception e){
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
     @GetMapping("/getTitle")
     public ResponseEntity getTaskTitleByToken(@RequestParam String token){
         try{

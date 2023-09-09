@@ -14,6 +14,9 @@ import com.example.TaskFlow.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class TaskServiceImpl implements TaskService {
 
@@ -110,5 +113,11 @@ public class TaskServiceImpl implements TaskService {
         else{
             throw new InvalidTaskException("Invalid Task");
         }
+    }
+
+    @Override
+    public List<Task> getAllTasks() throws Exception {
+        List<Task> taskList = taskRepository.findAll();
+        return taskList;
     }
 }
