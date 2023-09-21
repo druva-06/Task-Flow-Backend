@@ -1,5 +1,6 @@
 package com.example.TaskFlow.service;
 
+import com.example.TaskFlow.DTOs.ReponseDTOs.TaskObjectResponseDTO;
 import com.example.TaskFlow.DTOs.ReponseDTOs.TaskResponseDTO;
 import com.example.TaskFlow.DTOs.RequestDTOs.DescriptionUpdateRequestDto;
 import com.example.TaskFlow.DTOs.RequestDTOs.StatusUpdateRequestDto;
@@ -8,14 +9,12 @@ import com.example.TaskFlow.DTOs.RequestDTOs.TitleUpdateRequestDto;
 import com.example.TaskFlow.entity.Task;
 import com.example.TaskFlow.exception.DataUploadException;
 import com.example.TaskFlow.exception.InvalidTaskException;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 public interface TaskService {
 
-    TaskResponseDTO addTask(TaskRequestDTO taskRequestDTO) throws DataUploadException;
+    TaskResponseDTO addTask(TaskRequestDTO taskRequestDTO) throws Exception;
 
     TaskResponseDTO getTaskTitleByToken(String token) throws InvalidTaskException;
 
@@ -29,5 +28,5 @@ public interface TaskService {
 
     TaskResponseDTO deleteTaskByToken(String token) throws InvalidTaskException;
 
-    List<Task> getAllTasks() throws Exception;
+    List<TaskObjectResponseDTO> getAllTasks(String emailId) throws Exception;
 }

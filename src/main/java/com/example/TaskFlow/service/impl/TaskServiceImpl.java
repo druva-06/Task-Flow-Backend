@@ -1,15 +1,18 @@
 package com.example.TaskFlow.service.impl;
 
+import com.example.TaskFlow.DTOs.ReponseDTOs.TaskObjectResponseDTO;
 import com.example.TaskFlow.DTOs.ReponseDTOs.TaskResponseDTO;
 import com.example.TaskFlow.DTOs.RequestDTOs.DescriptionUpdateRequestDto;
 import com.example.TaskFlow.DTOs.RequestDTOs.StatusUpdateRequestDto;
 import com.example.TaskFlow.DTOs.RequestDTOs.TaskRequestDTO;
 import com.example.TaskFlow.DTOs.RequestDTOs.TitleUpdateRequestDto;
 import com.example.TaskFlow.entity.Task;
+import com.example.TaskFlow.entity.User;
 import com.example.TaskFlow.enums.Status;
 import com.example.TaskFlow.exception.DataUploadException;
 import com.example.TaskFlow.exception.InvalidTaskException;
 import com.example.TaskFlow.repository.TaskRepository;
+import com.example.TaskFlow.repository.UserRepository;
 import com.example.TaskFlow.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,15 +25,29 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     TaskRepository taskRepository;
+    @Autowired
+    UserRepository userRepository;
     @Override
-    public TaskResponseDTO addTask(TaskRequestDTO taskRequestDTO) throws DataUploadException {
+    public TaskResponseDTO addTask(TaskRequestDTO taskRequestDTO) throws Exception {
+
+        User user = userRepository.findByEmailId(taskRequestDTO.getEmailId());
+
+        if(user == null){
+            return new TaskResponseDTO("Invalid EmailId!");
+        }
+
         Task task = new Task();
         task.setToken(taskRequestDTO.getToken());
         task.setTitle(taskRequestDTO.getTitle());
         task.setDescription(taskRequestDTO.getDescription());
         task.setStatus(taskRequestDTO.getStatus());
 
-        taskRepository.save(task);
+        user.getTaskList().add(task);
+        task.setUser(user);
+
+        userRepository.save(user);
+
+        System.out.println(user.getTaskList());
 
         String message = task.getTitle() + " Task is Created Successfully!";
         return new TaskResponseDTO(message);
@@ -116,8 +133,16 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> getAllTasks() throws Exception {
-        List<Task> taskList = taskRepository.findAll();
-        return taskList;
+    public List<TaskObjectResponseDTO> getAllTasks(String emailId) throws Exception {
+        int user_id = userRepository.findByEmailId(emailId).getId();
+
+        List<Task> taskList = taskRepository.findByUserId(user_id);
+        List<TaskObjectResponseDTO> taskObjectResponseDTOS = new ArrayList<>();
+        for(Task task: taskList){
+            TaskObjectResponseDTO taskObjectResponseDTO = new TaskObjectResponseDTO(
+                    task.getToken(),task.getTitle(), task.getStatus(),task.getDescription());
+            taskObjectResponseDTOS.add(taskObjectResponseDTO);
+        }
+        return taskObjectResponseDTOS;
     }
 }

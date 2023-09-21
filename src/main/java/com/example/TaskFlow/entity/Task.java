@@ -1,12 +1,14 @@
 package com.example.TaskFlow.entity;
 
 import com.example.TaskFlow.enums.Status;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "task")
@@ -14,9 +16,12 @@ import lombok.experimental.FieldDefaults;
 @Builder
 public class Task {
     @Id
-    private String token;
-    private String title;
+    String token;
+    String title;
     @Enumerated(value = EnumType.STRING)
-    private Status status;
-    private String description;
+    Status status;
+    String description;
+    @ManyToOne
+    @JoinColumn
+    User user;
 }

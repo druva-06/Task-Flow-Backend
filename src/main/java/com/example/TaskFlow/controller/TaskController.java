@@ -1,6 +1,5 @@
 package com.example.TaskFlow.controller;
 
-import com.example.TaskFlow.DTOs.ReponseDTOs.TaskResponseDTO;
 import com.example.TaskFlow.DTOs.RequestDTOs.DescriptionUpdateRequestDto;
 import com.example.TaskFlow.DTOs.RequestDTOs.StatusUpdateRequestDto;
 import com.example.TaskFlow.DTOs.RequestDTOs.TaskRequestDTO;
@@ -24,14 +23,14 @@ public class TaskController {
         try{
             return new ResponseEntity(taskService.addTask(taskRequestDTO),HttpStatus.CREATED);
         }
-        catch (DataUploadException dataUploadException){
-            return new ResponseEntity(dataUploadException.getMessage(), HttpStatus.BAD_REQUEST);
+        catch (Exception exception){
+            return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
     @GetMapping("/allTasks")
-    public ResponseEntity getAllTasks(){
+    public ResponseEntity getAllTasks(@RequestParam String emailId){
         try{
-            return new ResponseEntity(taskService.getAllTasks(),HttpStatus.ACCEPTED);
+            return new ResponseEntity(taskService.getAllTasks(emailId),HttpStatus.ACCEPTED);
         }
         catch (Exception e){
             return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
