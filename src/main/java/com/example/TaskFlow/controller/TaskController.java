@@ -27,6 +27,15 @@ public class TaskController {
             return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+    @GetMapping("/token")
+    public ResponseEntity generateUniqueToken(){
+        try{
+            return new ResponseEntity(taskService.generateUniqueToken(),HttpStatus.CREATED);
+        }
+        catch (Exception exception){
+            return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
     @GetMapping("/allTasks")
     public ResponseEntity getAllTasks(@RequestParam String emailId){
         try{

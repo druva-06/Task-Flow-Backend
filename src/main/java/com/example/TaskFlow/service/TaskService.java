@@ -6,9 +6,9 @@ import com.example.TaskFlow.DTOs.RequestDTOs.DescriptionUpdateRequestDto;
 import com.example.TaskFlow.DTOs.RequestDTOs.StatusUpdateRequestDto;
 import com.example.TaskFlow.DTOs.RequestDTOs.TaskRequestDTO;
 import com.example.TaskFlow.DTOs.RequestDTOs.TitleUpdateRequestDto;
-import com.example.TaskFlow.entity.Task;
 import com.example.TaskFlow.exception.DataUploadException;
 import com.example.TaskFlow.exception.InvalidTaskException;
+import org.springframework.scheduling.config.Task;
 
 import java.util.List;
 
@@ -29,4 +29,6 @@ public interface TaskService {
     TaskResponseDTO deleteTaskByToken(String token) throws InvalidTaskException;
 
     List<TaskObjectResponseDTO> getAllTasks(String emailId) throws Exception;
+
+    TaskResponseDTO generateUniqueToken() throws Exception;
 }

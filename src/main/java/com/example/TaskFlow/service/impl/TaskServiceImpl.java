@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -144,5 +145,27 @@ public class TaskServiceImpl implements TaskService {
             taskObjectResponseDTOS.add(taskObjectResponseDTO);
         }
         return taskObjectResponseDTOS;
+    }
+
+    @Override
+    public TaskResponseDTO generateUniqueToken() throws Exception {
+
+        Random random = new Random();
+        String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        String token = "";
+
+        while(token.equals("") || taskRepository.existsById(token)){
+            token = "";
+            for(int i = 0; i < 15; i++){
+                if(i != 0){
+                    token += str.charAt(random.nextInt(str.length()));
+                }
+                else{
+                    token += str.charAt(random.nextInt(str.length() - 10));
+                }
+            }
+        }
+
+        return new TaskResponseDTO(token);
     }
 }
